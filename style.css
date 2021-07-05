@@ -1,3 +1,7 @@
+body {
+  font-family: Tahoma, sans-serif;
+}
+
 ul {
   list-style: none;
 }
@@ -5,24 +9,25 @@ ul {
 .projects-list-results {
   display: flex;
   flex-direction: row;
-  flex-flow: wrap;
+  align-content: flex-start;
 }
 
 .project__result {
   height: 150px;
   width: 150px;
 
-  background-color: antiquewhite;
   background-repeat: no-repeat;
   background-size: 100%;
 
   margin: 10px;
   border-radius: 5px;
 
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
+
+  box-shadow: -1px 1px 5px grey;
 }
 
 .project__result a {
@@ -32,12 +37,14 @@ ul {
 }
 
 .project__title {
+  box-shadow: -1px 1px 5px grey;
   padding: 10px;
   margin: 5px;
   color: black;
   background-color: white;
   border-radius: 5px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .spinner:before {
