@@ -105,29 +105,32 @@ ApiDemo.prototype.renderProjects = function(username, page) {
     document.getElementById('loading_indicator').style.display = 'none';
 
     const rootElement = document.getElementById('projects-list-results');
-    rootElement.innerHTML = '<h2>' + json.paginator.results + ' projects found</h2>' + 
-      '<p> page ' + json.paginator.page + ' of ' + json.paginator.last_page + '</p>';
+    // rootElement.innerHTML = '<h2>' + json.paginator.results + ' projects found</h2>' + 
+    //   '<p> page ' + json.paginator.page + ' of ' + json.paginator.last_page + '</p>';
 
-    const previousPageLink = document.getElementById('pagination-previous');
-    previousPageLink.style.display = json.paginator.page > 1 ? 'block' : 'none';
+    // const previousPageLink = document.getElementById('pagination-previous');
+    // previousPageLink.style.display = json.paginator.page > 1 ? 'block' : 'none';
 
-    const nextPageLink = document.getElementById('pagination-next');
-    nextPageLink.style.display = json.paginator.page < json.paginator.last_page ? 'block' : 'none';
+    // const nextPageLink = document.getElementById('pagination-next');
+    // nextPageLink.style.display = json.paginator.page < json.paginator.last_page ? 'block' : 'none';
 
     json.projects.forEach(function(project) {
-      const child = document.createElement('li');
+      const child = document.createElement('div');
       child.className = 'project__result';
 
-      if (project.first_photo) {
-        const img = document.createElement('img');
-        img.src = project.first_photo.square_url;
-        img.className = 'project__result__thumbnail';
-        child.appendChild(img);
-      }
+      const img = project.first_photo ? project.first_photo.square_url : "";
+      child.style.backgroundImage = 'url(' + img + ')';
 
       const title = document.createElement('a');
+      const titleText = document.createElement('p');
+      titleText.className = 'project__title';
+
       title.href = project.links.self.href;
-      title.innerText = project.name;
+      titleText.innerText = project.name;
+      title.appendChild(titleText);
+      // titleText.innerHTML = project.name;
+      // title.innerText = project.name;
+      // title.appendChild(innerText);
       child.appendChild(title);
 
       rootElement.appendChild(child);
