@@ -33,13 +33,7 @@ RavelryApi.prototype.projectsList = function(username, page) {
   return this.get(url);
 };
 
-
-
-
-
-
 // The above is all we need to get some JSON from the API!   The rest makes the example page do stuff:
-
 
 /* globals ApiDemo */
 
@@ -53,17 +47,16 @@ ApiDemo = function() {
 
 ApiDemo.prototype.createApiClient = function(authUsername, authPassword) {
   this.ravelryApiClient = new RavelryApi('https://api.ravelry.com', authUsername, authPassword);
-  this.ravelryApiClient.debugFunction = function(json) {
-    var inspector = document.getElementById('json-inspector');
-    inspector.style.display = 'block';
-    inspector.value = JSON.stringify(json, null, 2);
-    console.log(json);
-  };
+//   this.ravelryApiClient.debugFunction = function(json) {
+//     var inspector = document.getElementById('json-inspector');
+//     inspector.style.display = 'block';
+//     inspector.value = JSON.stringify(json, null, 2);
+//     console.log(json);
+//   };
 };
 
 
 ApiDemo.prototype.addEventListeners = function() {
-  const credentialsForm = document.getElementById('api-credentials-form');
   const projectListForm = document.getElementById('projects-list-form');
 
     const submitProjectSearch = function() {
@@ -73,29 +66,14 @@ ApiDemo.prototype.addEventListeners = function() {
 
 
   // create an API client when the page is loaded
-    const usernameKey = credentialsForm.querySelector("input[name='username_key']").value;
-    const passwordKey = credentialsForm.querySelector("input[name='password_key']").value;
+    const usernameKey = "read-84bca6d13528b8b3e477d9a019e00417";
+    const passwordKey = "ojGJolAV/FA3qMQs74mZlL0TvVqAG27uERZ607VL";
 
     this.createApiClient(usernameKey, passwordKey);
 
     document.getElementById('api-request').style.display = 'block';
     this.currentProjectPage = 1;
     submitProjectSearch();
-  
-
-//   // create an API client whenever the credentials form is submitted
-//   credentialsForm.onsubmit = function() {
-//     const usernameKey = credentialsForm.querySelector("input[name='username_key']").value;
-//     const passwordKey = credentialsForm.querySelector("input[name='password_key']").value;
-    
-//     this.createApiClient(usernameKey, passwordKey);
-    
-//     document.getElementById('api-request').style.display = 'block';
-//     this.currentProjectPage = 1;
-//     submitProjectSearch();
-    
-//     return false;
-//   }.bind(this);
 
     
   projectListForm.onsubmit = function() {
@@ -104,18 +82,18 @@ ApiDemo.prototype.addEventListeners = function() {
     return false;
   }.bind(this);
 
-  const previousLink = document.getElementById('pagination-previous');
-  const nextLink = document.getElementById('pagination-next');
+  // const previousLink = document.getElementById('pagination-previous');
+  // const nextLink = document.getElementById('pagination-next');
 
-  nextLink.addEventListener('click', function() {
-    this.currentProjectPage += 1;
-    submitProjectSearch();
-  }.bind(this));
+  // nextLink.addEventListener('click', function() {
+  //   this.currentProjectPage += 1;
+  //   submitProjectSearch();
+  // }.bind(this));
 
-  previousLink.addEventListener('click', function() {
-    this.currentProjectPage -= 1;
-    submitProjectSearch();
-  }.bind(this));
+  // previousLink.addEventListener('click', function() {
+  //   this.currentProjectPage -= 1;
+  //   submitProjectSearch();
+  // }.bind(this));
 
 };
 
@@ -157,9 +135,7 @@ ApiDemo.prototype.renderProjects = function(username, page) {
   });  
 };
 
-
-// go!
-
+// render content when ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", function() {
     new ApiDemo();
