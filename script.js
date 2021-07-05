@@ -65,27 +65,37 @@ ApiDemo.prototype.createApiClient = function(authUsername, authPassword) {
 ApiDemo.prototype.addEventListeners = function() {
   const credentialsForm = document.getElementById('api-credentials-form');
   const projectListForm = document.getElementById('projects-list-form');
-    
 
-  const submitProjectSearch = function() {
+    const submitProjectSearch = function() {
     const username = projectListForm.querySelector("input[name='username']").value;
     this.renderProjects(username, this.currentProjectPage);
   }.bind(this);
-  
 
-  // create an API client whenever the credentials form is submitted
-  credentialsForm.onsubmit = function() {
+
+  // create an API client when the page is loaded
     const usernameKey = credentialsForm.querySelector("input[name='username_key']").value;
     const passwordKey = credentialsForm.querySelector("input[name='password_key']").value;
-    
+
     this.createApiClient(usernameKey, passwordKey);
-    
+
     document.getElementById('api-request').style.display = 'block';
     this.currentProjectPage = 1;
     submitProjectSearch();
+  
+
+//   // create an API client whenever the credentials form is submitted
+//   credentialsForm.onsubmit = function() {
+//     const usernameKey = credentialsForm.querySelector("input[name='username_key']").value;
+//     const passwordKey = credentialsForm.querySelector("input[name='password_key']").value;
     
-    return false;
-  }.bind(this);
+//     this.createApiClient(usernameKey, passwordKey);
+    
+//     document.getElementById('api-request').style.display = 'block';
+//     this.currentProjectPage = 1;
+//     submitProjectSearch();
+    
+//     return false;
+//   }.bind(this);
 
     
   projectListForm.onsubmit = function() {
