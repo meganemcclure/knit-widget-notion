@@ -11,14 +11,21 @@
 </head>
 
 <body>
-
-    <hr />
+    <div id="start-api-request" class="section">
+        <h1>Enter Your Ravelry Username:</h1>
+        <p>
+        <form id="projects-list-form-start">
+            <input type="text" name="username" value="" />
+            <input type="submit" value="Get Projects" />
+        </form>
+        </p>
+    </div>
 
     <div id="api-request" class="section">
         <p>
         <form id="projects-list-form">
             List projects for...
-            <input type="text" name="username" value="meganemcclure" />
+            <input type="text" name="username" value="" />
             <input type="submit" value="Get Projects" />
             <span class="spinner" id="loading_indicator" style="display: none;"></span>
         </form>

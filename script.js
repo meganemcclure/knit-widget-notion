@@ -41,29 +41,25 @@ ApiDemo = function () {
   this.ravelryApiClient = null;
   this.currentProjectPage = null;
 
+  document.getElementById('start-api-request').style.display = 'block';
+  document.getElementById('api-request').style.display = 'none';
 
   this.addEventListeners();
 };
 
 ApiDemo.prototype.createApiClient = function (authUsername, authPassword) {
   this.ravelryApiClient = new RavelryApi('https://api.ravelry.com', authUsername, authPassword);
-  //   this.ravelryApiClient.debugFunction = function(json) {
-  //     var inspector = document.getElementById('json-inspector');
-  //     inspector.style.display = 'block';
-  //     inspector.value = JSON.stringify(json, null, 2);
-  //     console.log(json);
-  //   };
 };
-
 
 ApiDemo.prototype.addEventListeners = function () {
   const projectListForm = document.getElementById('projects-list-form');
+  const projectListFormStart = document.getElementById('projects-list-form-start')
 
-  const submitProjectSearch = function () {
-    const username = projectListForm.querySelector("input[name='username']").value;
+  const submitProjectSearch = function (form) {
+    this.currentProjectPage = 1;
+    const username = form.querySelector("input[name='username']").value;
     this.renderProjects(username, this.currentProjectPage);
   }.bind(this);
-
 
   // create an API client when the page is loaded
   const usernameKey = "read-84bca6d13528b8b3e477d9a019e00417";
@@ -71,14 +67,15 @@ ApiDemo.prototype.addEventListeners = function () {
 
   this.createApiClient(usernameKey, passwordKey);
 
-  document.getElementById('api-request').style.display = 'block';
-  this.currentProjectPage = 1;
-  submitProjectSearch();
-
-
   projectListForm.onsubmit = function () {
-    this.currentProjectPage = 1;
-    submitProjectSearch();
+    submitProjectSearch(projectListForm);
+    return false;
+  }.bind(this);
+
+  projectListFormStart.onsubmit = function() {
+    submitProjectSearch(projectListFormStart);
+    document.getElementById('start-api-request').style.display = 'none';
+    document.getElementById('api-request').style.display = 'block';
     return false;
   }.bind(this);
 
@@ -92,14 +89,7 @@ ApiDemo.prototype.renderProjects = function (username, page) {
     document.getElementById('loading_indicator').style.display = 'none';
 
     const rootElement = document.getElementById('projects-list-results');
-    // rootElement.innerHTML = '<h2>' + json.paginator.results + ' projects found</h2>' + 
-    //   '<p> page ' + json.paginator.page + ' of ' + json.paginator.last_page + '</p>';
-
-    // const previousPageLink = document.getElementById('pagination-previous');
-    // previousPageLink.style.display = json.paginator.page > 1 ? 'block' : 'none';
-
-    // const nextPageLink = document.getElementById('pagination-next');
-    // nextPageLink.style.display = json.paginator.page < json.paginator.last_page ? 'block' : 'none';
+    rootElement.innerHTML = ""; // clear any previous project entries
 
     json.projects.forEach(function (project) {
       const child = document.createElement('div');
