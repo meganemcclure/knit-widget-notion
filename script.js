@@ -21,6 +21,8 @@ RavelryApi.prototype.get = function (url) {
   }).then(function (json) {
     if (debugFunction) debugFunction(json);
     return json;
+  }).catch(function (e) {
+    document.getElementById('no-results').style.display = 'flex';
   });
 };
 
@@ -41,7 +43,7 @@ ApiDemo = function () {
   this.ravelryApiClient = null;
   this.currentProjectPage = null;
 
-  document.getElementById('start-api-request').style.display = 'block';
+  document.getElementById('start-api-request').style.display = 'flex';
   document.getElementById('api-request').style.display = 'none';
 
   this.addEventListeners();
@@ -110,6 +112,8 @@ ApiDemo.prototype.renderProjects = function (username, page) {
       rootElement.appendChild(child);
     });
   });
+
+  document.getElementById('no-results').style.display = 'none';
 };
 
 // render content when ready
