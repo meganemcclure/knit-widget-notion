@@ -1,56 +1,28 @@
-/* globals RavelryApi */
+import { RavelryApi } from './scripts/RavelryApi.js'
 
-RavelryApi = function (base, authUsername, authPassword) {
-  this.base = base;
-  this.authUsername = authUsername;
-  this.authPassword = authPassword;
-  this.debugFunction = null;
-};
-
-
-RavelryApi.prototype.get = function (url) {
-  const headers = new Headers();
-  const debugFunction = this.debugFunction;
-  // This is the HTTP header that you need add in order to access api.ravelry.com with a read only API key
-  // `btoa` will base 64 encode a string: https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
-
-  headers.append('Authorization', 'Basic ' + btoa(this.authUsername + ":" + this.authPassword));
-
-  return fetch(url, { method: 'GET', headers: headers }).then(function (response) {
-    return response.json();
-  }).then(function (json) {
-    if (debugFunction) debugFunction(json);
-    return json;
-  }).catch(function (e) {
-    document.getElementById('no-results').style.display = 'flex';
-  });
-};
-
-// Retrieve a list of projects for a user: https://www.ravelry.com/api#projects_list
-// Pagination is optional, default is no pagination
-
-RavelryApi.prototype.projectsList = function (username, page) {
-  const pageSize = 25;
-  const url = this.base + '/projects/' + username + '/list.json?page=' + page + '&page_size=' + pageSize;
-  return this.get(url);
-};
-
-// The above is all we need to get some JSON from the API!   The rest makes the example page do stuff:
-
-/* globals ApiDemo */
-
-ApiDemo = function () {
+let ApiDemo = function () {
   this.ravelryApiClient = null;
   this.currentProjectPage = null;
 
-  document.getElementById('start-api-request').style.display = 'flex';
-  document.getElementById('api-request').style.display = 'none';
+  // create an API client when the page is loaded
+  const usernameKey = "read-84bca6d13528b8b3e477d9a019e00417";
+  const passwordKey = "ojGJolAV/FA3qMQs74mZlL0TvVqAG27uERZ607VL";
+  this.ravelryApiClient = new RavelryApi('https://api.ravelry.com', usernameKey, passwordKey);
 
+  // initialize starting window
+  if (localStorage['username']) {
+    document.getElementById('username-box').style.display = 'none';
+    document.getElementById('api-request').style.display = 'block';
+
+    this.currentProjectPage = 1;
+    this.renderProjects(localStorage['username'], this.currentProjectPage);
+  } else {
+    document.getElementById('username-box').style.display = 'flex';
+    document.getElementById('api-request').style.display = 'none';
+  }
+
+  // add event listeners to the page
   this.addEventListeners();
-};
-
-ApiDemo.prototype.createApiClient = function (authUsername, authPassword) {
-  this.ravelryApiClient = new RavelryApi('https://api.ravelry.com', authUsername, authPassword);
 };
 
 ApiDemo.prototype.addEventListeners = function () {
@@ -60,14 +32,9 @@ ApiDemo.prototype.addEventListeners = function () {
   const submitProjectSearch = function (form) {
     this.currentProjectPage = 1;
     const username = form.querySelector("input[name='username']").value;
+    localStorage['username'] = username;
     this.renderProjects(username, this.currentProjectPage);
   }.bind(this);
-
-  // create an API client when the page is loaded
-  const usernameKey = "read-84bca6d13528b8b3e477d9a019e00417";
-  const passwordKey = "ojGJolAV/FA3qMQs74mZlL0TvVqAG27uERZ607VL";
-
-  this.createApiClient(usernameKey, passwordKey);
 
   projectListForm.onsubmit = function () {
     submitProjectSearch(projectListForm);
@@ -76,13 +43,12 @@ ApiDemo.prototype.addEventListeners = function () {
 
   projectListFormStart.onsubmit = function() {
     submitProjectSearch(projectListFormStart);
-    document.getElementById('start-api-request').style.display = 'none';
+    document.getElementById('username-box').style.display = 'none';
     document.getElementById('api-request').style.display = 'block';
     return false;
   }.bind(this);
 
 };
-
 
 ApiDemo.prototype.renderProjects = function (username, page) {
   document.getElementById('loading_indicator').style.display = 'inline-block';
